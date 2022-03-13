@@ -2,11 +2,11 @@ name: Auto-Release on PR Merge
 
 on:
   pull_request:
-  #   types: [closed]
+    types: [closed]
 
 jobs:
   release:
-    # if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     container: dart:2.14.4
 

@@ -65,24 +65,24 @@ void main(List<String> args) async {
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
-  // Process.runSync('git', ['add', 'pubspec.yaml', 'CHANGELOG.md']);
-  // Process.runSync('git', ['commit', '-m', 'auto prep $newVersion']);
-  // Process.runSync('git', ['push']);
+  Process.runSync('git', ['add', 'pubspec.yaml', 'CHANGELOG.md']);
+  Process.runSync('git', ['commit', '-m', 'auto prep $newVersion']);
+  Process.runSync('git', ['push']);
   var res = Process.runSync('git', ['rev-parse', 'HEAD']);
   var commit = res.stdout;
   print('autoprep commit: $commit');
 
-  // var release = await gh.repositories.createRelease(
-  //     slug,
-  //     CreateRelease.from(
-  //         tagName: newVersion,
-  //         name: newVersion,
-  //         generateReleaseNotes: true,
-  //         targetCommitish: commit,
-  //         isDraft: false,
-  //         isPrerelease: false));
+  var release = await gh.repositories.createRelease(
+      slug,
+      CreateRelease.from(
+          tagName: newVersion,
+          name: newVersion,
+          generateReleaseNotes: true,
+          targetCommitish: commit,
+          isDraft: false,
+          isPrerelease: false));
 
-  // print('$newVersion release created at ${release.createdAt}');
+  print('$newVersion release created at ${release.createdAt}');
   
   exit(0);
 }
