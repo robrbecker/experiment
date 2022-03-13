@@ -48,7 +48,8 @@ void main(List<String> args) async {
   print('New Version    : $newVersion');
 
   var rn = await gh.repositories.generateReleaseNotes(CreateReleaseNotes(
-      slug.owner, slug.name, newVersion));
+      slug.owner, slug.name, newVersion,
+      previousTagName: currentVersion));
 
   var releaseNotes = rn.body.replaceFirst('## What\'s Changed','');
   releaseNotes = '## $newVersion\n$releaseNotes';
