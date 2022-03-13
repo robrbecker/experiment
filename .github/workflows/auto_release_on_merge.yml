@@ -2,7 +2,7 @@ name: Auto-Release on PR Merge
 
 on:
   pull_request:
-    types: [closed]
+  #  types: [closed]
 
 jobs:
   release:
