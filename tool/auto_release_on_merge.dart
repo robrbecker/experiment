@@ -23,7 +23,8 @@ void main(List<String> args) async {
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
   
   var pr = await gh.pullRequests.get(slug, pullnumber);
-  
+  print('PR $pullnumber loaded');
+
   var labels = pr.labels ?? [];
   var semverLabel = labels
       .map((e) => e.name)
@@ -39,15 +40,8 @@ void main(List<String> args) async {
     exit(3);
   }
   print('Semver label: $semverLabel');
-  
-  
-  if (!(pr.merged ?? false)) {
-    print('PR not merged');
-    exit(1);
-  }
-  print('PR loaded');
 
-  
+
   Process.runSync('cider', ['bump', semverLabel]);
   var newVersion = getVersion();
   print('Current Version: $currentVersion');
@@ -61,6 +55,11 @@ void main(List<String> args) async {
   releaseNotes = '## $newVersion\n$releaseNotes';
   
   print(releaseNotes);
+
+  if (!(pr.merged ?? false)) {
+    print('PR not merged');
+    exit(1);
+  }
 
   var log = File('CHANGELOG.md');
   var logdata = log.readAsStringSync();
