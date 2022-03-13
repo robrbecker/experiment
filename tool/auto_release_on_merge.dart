@@ -62,7 +62,7 @@ void main(List<String> args) async {
   }
 
   var log = File('CHANGELOG.md');
-  var logdata = log.readAsStringSync();
+  var logdata = log.existsSync() ? log.readAsStringSync() : '';
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
   // Process.runSync('git', ['add', 'pubspec.yaml', 'CHANGELOG.md']);
