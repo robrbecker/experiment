@@ -16,8 +16,11 @@ jobs:
       - name: Release
         run: |
           echo ${{github.repository}}
-          echo ${{github.event.pull_request.id}}
+          echo ${{github.event.pull_request.number}}
           echo ______
           export PATH="$PATH":"$HOME/.pub-cache/bin"
           export GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}
+          pub get
+          pub global activate cider
+          dart tool/auto_release_on_merge.dart ${{github.repository}} ${{github.event.pull_request.number}}
           
