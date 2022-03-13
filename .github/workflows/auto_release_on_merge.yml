@@ -20,7 +20,4 @@ jobs:
           echo ______
           export PATH="$PATH":"$HOME/.pub-cache/bin"
           export GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}
-          # pub get
-          # pub global activate cider
-          # dart tool/auto_release_on_merge.dart ${{GITHUB_REPOSITORY}} ${{github.event.pull_request.id}}
           
