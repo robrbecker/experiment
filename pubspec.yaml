@@ -1,0 +1,12 @@
+name: experiment
+version: 1.0.0
+description: An experimental repo to try things out
+homepage: https://github.com/robrbecker/experiment
+
+environment:
+  sdk: '>=2.14.0 <3.0.0'
+
+# dependencies:
+
+dev_dependencies:
+  github:
