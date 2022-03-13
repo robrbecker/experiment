@@ -32,10 +32,10 @@ void main(List<String> args) async {
     print('No semver label found');
     exit(2);
   }
-  semverLabel = semverLabel..toLowerCase().replaceAll('semver:', '').trim();
+  semverLabel = semverLabel.toLowerCase().replaceAll('semver:', '').trim();
   // ensure the semver label is valid
   if (!semvers.contains(semverLabel)) {
-    print('semver label is not one of $semvers');
+    print('semver label [$semverLabel] is not one of $semvers');
     exit(3);
   }
   print('Semver label: $semverLabel');
