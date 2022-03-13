@@ -5,50 +5,49 @@ import 'package:yaml/yaml.dart';
 const semvers = ['major', 'minor', 'patch'];
 
 /// Meant to be run from the github workflow.
-/// Expected argument of PR_NUMBER of which to get
-/// the semver label from
+/// Expected arguments of:
+/// [repo] the full repo owner/name format
+/// [pr number] PR number of which to release
+/// the semver label is expected to be on the PR
 void main(List<String> args) async {
-  if (args.length < 1) {
-    print('Usage: release pullid');
+  if (args.length < 2) {
+    print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
     exit(0);
   }
-  print(args);
-  return;
-  
-  // install Cider and make sure were on a clean master
-  //Process.runSync('pub', ['global', 'activate', 'cider']);
-  // Process.runSync('git', ['checkout', 'master', '-f']);
-  // Process.runSync('git', ['pull']);
+  final fullrepo = args[0];
+  final pullnumber = int.parse(args[1]);
+  final currentVersion = getVersion();
+  var slug = RepositorySlug.full(fullrepo);
 
-  var currentVersion = getVersion();
-
-  var slug = RepositorySlug('SpinlockLabs','github.dart');
-  var number = int.parse(args[0]);
-  print('Loading PR $number from $slug');
+  print('Loading PR $pullnumber from $slug');
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
-  print('TOKEN: ${gh.auth?.token}');
-  var pr = await gh.pullRequests.get(slug, number);
-  if (!(pr.merged ?? false)) {
-    print('PR not merged');
-    exit(0);
-  }
-  print('PR loaded');
-
+  
+  var pr = await gh.pullRequests.get(slug, pullnumber);
+  
   var labels = pr.labels ?? [];
   var semverLabel = labels
       .map((e) => e.name)
       .firstWhere((label) => label.startsWith('semver'), orElse: () => '');
   if (semverLabel.isEmpty) {
     print('No semver label found');
-    exit(0);
+    exit(2);
   }
-  semverLabel = semverLabel.replaceAll('semver:', '');
+  semverLabel = semverLabel.toLowerCase().replaceAll('semver:', '').trim();
   // ensure the semver label is valid
   if (!semvers.contains(semverLabel)) {
-    print('semver label is not one of $semvers');
-    exit(0);
+    print('semver label [$semverLabel] is not one of $semvers');
+    exit(3);
   }
   print('Semver label: $semverLabel');
+  
+  
+  if (!(pr.merged ?? false)) {
+    print('PR not merged');
+    exit(1);
+  }
+  print('PR loaded');
+
+  
   Process.runSync('cider', ['bump', semverLabel]);
   var newVersion = getVersion();
   print('Current Version: $currentVersion');
@@ -60,10 +59,11 @@ void main(List<String> args) async {
 
   var releaseNotes = rn.body.replaceFirst('## What\'s Changed','');
   releaseNotes = '## $newVersion\n$releaseNotes';
+  
   print(releaseNotes);
+
   var log = File('CHANGELOG.md');
   var logdata = log.readAsStringSync();
-  
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
   // Process.runSync('git', ['add', 'pubspec.yaml', 'CHANGELOG.md']);

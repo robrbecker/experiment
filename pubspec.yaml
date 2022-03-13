@@ -10,3 +10,4 @@ environment:
 
 dev_dependencies:
   github:
+  yaml:
