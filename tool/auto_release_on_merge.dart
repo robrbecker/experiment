@@ -21,14 +21,9 @@ void main(List<String> args) async {
 
   print('Loading PR $pullnumber from $slug');
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
-  print('TOKEN: ${gh.auth?.token}');
+  
   var pr = await gh.pullRequests.get(slug, pullnumber);
-  if (!(pr.merged ?? false)) {
-    print('PR not merged');
-    exit(1);
-  }
-  print('PR loaded');
-
+  
   var labels = pr.labels ?? [];
   var semverLabel = labels
       .map((e) => e.name)
@@ -37,13 +32,22 @@ void main(List<String> args) async {
     print('No semver label found');
     exit(2);
   }
-  semverLabel = semverLabel.replaceAll('semver:', '');
+  semverLabel = semverLabel..toLowerCase().replaceAll('semver:', '').trim();
   // ensure the semver label is valid
   if (!semvers.contains(semverLabel)) {
     print('semver label is not one of $semvers');
     exit(3);
   }
   print('Semver label: $semverLabel');
+  
+  
+  if (!(pr.merged ?? false)) {
+    print('PR not merged');
+    exit(1);
+  }
+  print('PR loaded');
+
+  
   Process.runSync('cider', ['bump', semverLabel]);
   var newVersion = getVersion();
   print('Current Version: $currentVersion');
