@@ -3,12 +3,12 @@ name: Auto-Release on PR Merge
 # Runs when a PR merges. See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-your-workflow-when-a-pull-request-merges
 on:
   pull_request:
-    #types:
-    #  - closed
+    types:
+      - closed
 
 jobs:
   release:
-    #if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     container: dart:2.14.4
 
