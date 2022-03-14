@@ -10,7 +10,20 @@ const semvers = ['major', 'minor', 'patch'];
 /// [pr number] PR number of which to release
 /// the semver label is expected to be on the PR
 void main(List<String> args) async {
-  // File('generated.txt').writeAsStringSync('text');
+  if (args.length < 2) {
+    print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
+    exit(1);
+  }
+
+  final fullrepo = args[0];
+  final pullnumber = int.parse(args[1]);
+  final currentVersion = getVersion();
+  var slug = RepositorySlug.full(fullrepo);
+
+  print('Loading PR $pullnumber from $slug');
+  var gh = GitHub(auth: findAuthenticationFromEnvironment());
+
+// File('generated.txt').writeAsStringSync('text');
   // run('git add .');
   // run('git commit -m gen');
   // run('git push');
@@ -27,23 +40,6 @@ void main(List<String> args) async {
 
   return;
 
-
-  if (args.length < 2) {
-    print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
-    exit(1);
-  }
-
-  // make sure we're on a clean master
-  //run('git checkout main -f');
-
-  final fullrepo = args[0];
-  final pullnumber = int.parse(args[1]);
-  final currentVersion = getVersion();
-  var slug = RepositorySlug.full(fullrepo);
-
-  print('Loading PR $pullnumber from $slug');
-  var gh = GitHub(auth: findAuthenticationFromEnvironment());
-  
   var pr = await gh.pullRequests.get(slug, pullnumber);
   if (!(pr.merged ?? false)) {
     print('PR not merged. skipping.');
