@@ -16,7 +16,7 @@ void main(List<String> args) async {
   // }
 
   final fullrepo = args[0];
-  final pullnumber = int.parse(args[1]);
+  //final pullnumber = int.parse(args[1]);
   final currentVersion = getVersion();
   var slug = RepositorySlug.full(fullrepo);
 
