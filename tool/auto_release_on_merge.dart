@@ -14,6 +14,11 @@ void main(List<String> args) async {
     print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
     exit(1);
   }
+
+  // make sure we're on a clean master
+  run('git checkout main -f');
+  run('git commit -m "test"');
+
   final fullrepo = args[0];
   final pullnumber = int.parse(args[1]);
   final currentVersion = getVersion();
