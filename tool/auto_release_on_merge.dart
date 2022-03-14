@@ -23,6 +23,10 @@ void main(List<String> args) async {
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
   
   var pr = await gh.pullRequests.get(slug, pullnumber);
+  if (!(pr.merged ?? false)) {
+    print('PR not merged. skipping.');
+    exit(0);
+  }
   print('PR $pullnumber loaded');
 
   var labels = pr.labels ?? [];
@@ -55,11 +59,6 @@ void main(List<String> args) async {
   releaseNotes = '## $newVersion\n$releaseNotes';
   
   print(releaseNotes);
-
-  if (!(pr.merged ?? false)) {
-    print('PR not merged');
-    exit(1);
-  }
 
   var log = File('CHANGELOG.md');
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
