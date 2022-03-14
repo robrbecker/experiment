@@ -46,7 +46,7 @@ void main(List<String> args) async {
   print('Semver label: $semverLabel');
 
 
-  Process.runSync('cider', ['bump', semverLabel]);
+  run('cider bump $semverLabel');
   var newVersion = getVersion();
   print('Current Version: $currentVersion');
   print('New Version    : $newVersion');
@@ -64,11 +64,10 @@ void main(List<String> args) async {
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
-  Process.runSync('git', ['add', 'pubspec.yaml', 'CHANGELOG.md']);
-  Process.runSync('git', ['commit', '-m', 'auto prep $newVersion']);
-  Process.runSync('git', ['push']);
-  var res = Process.runSync('git', ['rev-parse', 'HEAD']);
-  var commit = res.stdout;
+  run('git add pubspec.yaml CHANGELOG.md');
+  run('git commit -m "auto prep $newVersion"');
+  run('git push');
+  var commit = run('git rev-parse HEAD');
   print('autoprep commit: $commit');
 
   var release = await gh.repositories.createRelease(
@@ -90,4 +89,17 @@ String getVersion() {
   var y = loadYaml(File('pubspec.yaml').readAsStringSync());
   var newVersion = y['version'].toString();
   return newVersion;
+}
+
+String run(String cmd) {
+  var args = cmd.split(' ');
+  if (args.isEmpty) return '';
+  var first = args.removeAt(0);
+  var result = Process.runSync(first, args);
+  if (result.stdout != null) print(result.stdout);
+  if (result.stderr != null) print(result.stderr);
+  if (result.exitCode != 0) {
+    throw Exception('Command failed');
+  }
+  return result.stdout;
 }
