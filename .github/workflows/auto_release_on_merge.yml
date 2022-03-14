@@ -14,7 +14,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
       - name: Release
         run: |
           git config user.email "robrbecker@gmail.com"
