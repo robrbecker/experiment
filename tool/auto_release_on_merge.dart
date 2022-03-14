@@ -14,6 +14,10 @@ void main(List<String> args) async {
     print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
     exit(1);
   }
+
+  // make sure we're on a clean master
+  run('git checkout main -f');
+
   final fullrepo = args[0];
   final pullnumber = int.parse(args[1]);
   final currentVersion = getVersion();
@@ -65,7 +69,7 @@ void main(List<String> args) async {
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
   run('git add pubspec.yaml CHANGELOG.md');
-  run('git commit -m "auto prep $newVersion"');
+  run('git commit -m "auto-prep:$newVersion"');
   run('git push');
   var commit = run('git rev-parse HEAD');
   print('autoprep commit: $commit');
@@ -96,10 +100,14 @@ String run(String cmd) {
   if (args.isEmpty) return '';
   var first = args.removeAt(0);
   var result = Process.runSync(first, args);
+  if (result.exitCode != 0) {
+    print('Command failed');
+  }
   if (result.stdout != null) print(result.stdout);
   if (result.stderr != null) print(result.stderr);
   if (result.exitCode != 0) {
-    throw Exception('Command failed');
+    exit(6);
   }
+
   return result.stdout;
 }

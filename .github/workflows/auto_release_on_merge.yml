@@ -17,6 +17,8 @@ jobs:
         uses: actions/checkout@v1
       - name: Release
         run: |
+          git config user.email "robrbecker@gmail.com"
+          git config user.name "Rob Becker"
           export PATH="$PATH":"$HOME/.pub-cache/bin"
           export GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}
           pub get
