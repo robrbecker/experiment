@@ -69,9 +69,8 @@ void main(List<String> args) async {
   log.writeAsStringSync('${releaseNotes}\n\n$logdata');
   
   run('git add pubspec.yaml CHANGELOG.md');
-  run('git commit -m "auto-prep:$newVersion"');
+  run('git', rest: ['commit', '-m', 'prep $newVersion']);
   run('git push');
-  // run('git push "https://\$GITHUB_ACTOR:\$GITHUB_TOKEN@github.com/$fullrepo.git" main');
   var commit = run('git rev-parse HEAD');
   print('autoprep commit: $commit');
 
@@ -96,11 +95,16 @@ String getVersion() {
   return newVersion;
 }
 
-String run(String cmd) {
-  var args = cmd.split(' ');
-  if (args.isEmpty) return '';
-  var first = args.removeAt(0);
-  var result = Process.runSync(first, args);
+String run(String cmd, {List<String>? rest}) {
+  var args = <String>[];
+  if (rest != null) {
+    args = rest;
+  } else {
+    args = cmd.split(' ');
+    if (args.isEmpty) return '';
+    cmd = args.removeAt(0);
+  }
+  var result = Process.runSync(cmd, args);
   if (result.exitCode != 0) {
     print('Command failed');
   }
