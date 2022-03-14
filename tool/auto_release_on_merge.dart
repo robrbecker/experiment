@@ -17,7 +17,6 @@ void main(List<String> args) async {
 
   // make sure we're on a clean master
   run('git checkout main -f');
-  run('git commit -m "test"');
 
   final fullrepo = args[0];
   final pullnumber = int.parse(args[1]);
@@ -101,10 +100,14 @@ String run(String cmd) {
   if (args.isEmpty) return '';
   var first = args.removeAt(0);
   var result = Process.runSync(first, args);
+  if (result.exitCode != 0) {
+    print('Command failed');
+  }
   if (result.stdout != null) print(result.stdout);
   if (result.stderr != null) print(result.stderr);
   if (result.exitCode != 0) {
-    throw Exception('Command failed');
+    exit(6);
   }
+
   return result.stdout;
 }
