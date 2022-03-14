@@ -10,11 +10,24 @@ const semvers = ['major', 'minor', 'patch'];
 /// [pr number] PR number of which to release
 /// the semver label is expected to be on the PR
 void main(List<String> args) async {
-  File('generated.txt').writeAsStringSync('text');
-  run('git add .');
-  run('git commit -m gen');
-  run('git push');
+  // File('generated.txt').writeAsStringSync('text');
+  // run('git add .');
+  // run('git commit -m gen');
+  // run('git push');
+
+  var release = await gh.repositories.createRelease(
+      slug,
+      CreateRelease.from(
+          tagName: '1.0.1',
+          name: '1.0.1',
+          generateReleaseNotes: true,
+          targetCommitish: 'f18c4b656a48f1a2be3b738f816cb39abea439f4',
+          isDraft: false,
+          isPrerelease: false));
+
   return;
+
+
   if (args.length < 2) {
     print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
     exit(1);
