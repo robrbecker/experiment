@@ -12,7 +12,7 @@ const semvers = ['major', 'minor', 'patch'];
 void main(List<String> args) async {
   if (args.length < 2) {
     print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
-    exit(0);
+    exit(1);
   }
   final fullrepo = args[0];
   final pullnumber = int.parse(args[1]);
@@ -23,6 +23,10 @@ void main(List<String> args) async {
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
   
   var pr = await gh.pullRequests.get(slug, pullnumber);
+  if (!(pr.merged ?? false)) {
+    print('PR not merged. skipping.');
+    exit(0);
+  }
   print('PR $pullnumber loaded');
 
   var labels = pr.labels ?? [];
@@ -55,11 +59,6 @@ void main(List<String> args) async {
   releaseNotes = '## $newVersion\n$releaseNotes';
   
   print(releaseNotes);
-
-  if (!(pr.merged ?? false)) {
-    print('PR not merged');
-    exit(1);
-  }
 
   var log = File('CHANGELOG.md');
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
