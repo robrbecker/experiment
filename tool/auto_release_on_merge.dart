@@ -70,7 +70,7 @@ void main(List<String> args) async {
   
   run('git add pubspec.yaml CHANGELOG.md');
   run('git commit -m "auto-prep:$newVersion"');
-  run('git push');
+  run('git push origin main');
   var commit = run('git rev-parse HEAD');
   print('autoprep commit: $commit');
 
