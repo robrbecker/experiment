@@ -19,8 +19,6 @@ void main(List<String> args) async {
   //final pullnumber = int.parse(args[1]);
   final currentVersion = getVersion();
   var slug = RepositorySlug.full(fullrepo);
-
-  print('Loading PR $pullnumber from $slug');
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
 
 // File('generated.txt').writeAsStringSync('text');
@@ -39,7 +37,8 @@ void main(List<String> args) async {
           isPrerelease: false));
 
   return;
-
+  /*
+  print('Loading PR $pullnumber from $slug');
   var pr = await gh.pullRequests.get(slug, pullnumber);
   if (!(pr.merged ?? false)) {
     print('PR not merged. skipping.');
@@ -99,7 +98,7 @@ void main(List<String> args) async {
           isPrerelease: false));
 
   print('$newVersion release created at ${release.createdAt}');
-  
+  */
   exit(0);
 }
 
