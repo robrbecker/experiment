@@ -2,14 +2,14 @@ name: Auto-Release on PR Merge
 
 # Runs when a PR merges. See https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#running-your-workflow-when-a-pull-request-merges
 on:
-  push:
-  #pull_request:
-    #types:
-      #- closed
+  #push:
+  pull_request:
+    types:
+      - closed
 
 jobs:
   release:
-    #if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     permissions:
       contents: write
     runs-on: ubuntu-latest

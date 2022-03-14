@@ -10,34 +10,17 @@ const semvers = ['major', 'minor', 'patch'];
 /// [pr number] PR number of which to release
 /// the semver label is expected to be on the PR
 void main(List<String> args) async {
-  // if (args.length < 2) {
-  //   print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
-  //   exit(1);
-  // }
+  if (args.length < 2) {
+    print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
+    exit(1);
+  }
 
   final fullrepo = args[0];
-  //final pullnumber = int.parse(args[1]);
+  final pullnumber = int.parse(args[1]);
   final currentVersion = getVersion();
   var slug = RepositorySlug.full(fullrepo);
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
 
-// File('generated.txt').writeAsStringSync('text');
-  // run('git add .');
-  // run('git commit -m gen');
-  // run('git push');
-
-  await gh.repositories.createRelease(
-      slug,
-      CreateRelease.from(
-          tagName: '1.0.1',
-          name: '1.0.1',
-          generateReleaseNotes: true,
-          targetCommitish: 'f18c4b656a48f1a2be3b738f816cb39abea439f4',
-          isDraft: false,
-          isPrerelease: false));
-
-  return;
-  /*
   print('Loading PR $pullnumber from $slug');
   var pr = await gh.pullRequests.get(slug, pullnumber);
   if (!(pr.merged ?? false)) {
@@ -84,8 +67,8 @@ void main(List<String> args) async {
   run('git add pubspec.yaml CHANGELOG.md');
   run('git', rest: ['commit', '-m', 'prep $newVersion']);
   run('git push');
-  var commit = run('git rev-parse HEAD');
-  print('autoprep commit: $commit');
+  // var commit = run('git rev-parse HEAD');
+  // print('autoprep commit: $commit');
 
   var release = await gh.repositories.createRelease(
       slug,
@@ -93,12 +76,11 @@ void main(List<String> args) async {
           tagName: newVersion,
           name: newVersion,
           generateReleaseNotes: true,
-          targetCommitish: commit,
+          targetCommitish: 'main',
           isDraft: false,
           isPrerelease: false));
 
   print('$newVersion release created at ${release.createdAt}');
-  */
   exit(0);
 }
 
