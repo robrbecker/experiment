@@ -28,7 +28,7 @@ void main(List<String> args) async {
   // run('git commit -m gen');
   // run('git push');
 
-  var release = await gh.repositories.createRelease(
+  await gh.repositories.createRelease(
       slug,
       CreateRelease.from(
           tagName: '1.0.1',
