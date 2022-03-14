@@ -10,7 +10,7 @@ const semvers = ['major', 'minor', 'patch'];
 /// [pr number] PR number of which to release
 /// the semver label is expected to be on the PR
 void main(List<String> args) async {
-  run('echo hi > generated.txt');
+  File('generated.txt').writeAsStringSync('text');
   run('git add .');
   run('git commit -m gen');
   run('git push');
