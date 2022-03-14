@@ -12,7 +12,7 @@ const semvers = ['major', 'minor', 'patch'];
 void main(List<String> args) async {
   if (args.length < 2) {
     print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
-    exit(0);
+    exit(1);
   }
   final fullrepo = args[0];
   final pullnumber = int.parse(args[1]);
