@@ -3,20 +3,24 @@ import 'package:github/github.dart';
 import 'package:yaml/yaml.dart';
 
 const semvers = ['major', 'minor', 'patch'];
+const fullrepo = 'robrbecker/experiment';
 
 /// Meant to be run from the github workflow.
 /// Expected arguments of:
-/// [repo] the full repo owner/name format
 /// [pr number] PR number of which to release
 /// the semver label is expected to be on the PR
-void main(List<String> args) async {
-  if (args.length < 2) {
-    print('Usage: dart tool/auto_release_on_merge owner_and_repo pull_number');
+Future<void> main(List<String> args) async {
+  if (args.isEmpty) {
+    print('Usage: dart tool/auto_release_on_merge pull_number');
     exit(1);
   }
 
-  final fullrepo = args[0];
-  final pullnumber = int.parse(args[1]);
+  final pullnumber = int.tryParse(args[0]);
+  if (pullnumber == null) {
+    print('pull request number is missing');
+    print('Usage: dart tool/auto_release_on_merge pull_number');
+    exit(1);
+  }
   final currentVersion = getVersion();
   var slug = RepositorySlug.full(fullrepo);
   var gh = GitHub(auth: findAuthenticationFromEnvironment());
@@ -45,7 +49,6 @@ void main(List<String> args) async {
   }
   print('Semver label: $semverLabel');
 
-
   run('cider bump $semverLabel');
   var newVersion = getVersion();
   print('Current Version: $currentVersion');
@@ -55,15 +58,15 @@ void main(List<String> args) async {
       slug.owner, slug.name, newVersion,
       previousTagName: currentVersion));
 
-  var releaseNotes = rn.body.replaceFirst('## What\'s Changed','');
+  var releaseNotes = rn.body.replaceFirst('## What\'s Changed', '');
   releaseNotes = '## $newVersion\n$releaseNotes';
-  
+
   print(releaseNotes);
 
   var log = File('CHANGELOG.md');
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
-  log.writeAsStringSync('${releaseNotes}\n\n$logdata');
-  
+  log.writeAsStringSync('$releaseNotes\n\n$logdata');
+
   run('git add pubspec.yaml CHANGELOG.md');
   run('git', rest: ['commit', '-m', 'prep $newVersion']);
   run('git push');
@@ -76,7 +79,7 @@ void main(List<String> args) async {
           tagName: newVersion,
           name: newVersion,
           generateReleaseNotes: true,
-          targetCommitish: 'main',
+          targetCommitish: 'master',
           isDraft: false,
           isPrerelease: false));
 
@@ -96,15 +99,21 @@ String run(String cmd, {List<String>? rest}) {
     args = rest;
   } else {
     args = cmd.split(' ');
-    if (args.isEmpty) return '';
+    if (args.isEmpty) {
+      return '';
+    }
     cmd = args.removeAt(0);
   }
   var result = Process.runSync(cmd, args);
   if (result.exitCode != 0) {
     print('Command failed');
   }
-  if (result.stdout != null) print(result.stdout);
-  if (result.stderr != null) print(result.stderr);
+  if (result.stdout != null) {
+    print(result.stdout);
+  }
+  if (result.stderr != null) {
+    print(result.stderr);
+  }
   if (result.exitCode != 0) {
     exit(6);
   }

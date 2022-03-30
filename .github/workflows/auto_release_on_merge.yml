@@ -26,9 +26,9 @@ jobs:
           git config --global user.name ${{ secrets.USER_NAME }}
           git config --global user.email ${{ secrets.USER_EMAIL }}
           export PATH="$PATH":"$HOME/.pub-cache/bin"
-          export GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}
+          export GITHUB_TOKEN=${{secrets.MACHINE_GITHUB_API_TOKEN}}
           export MACHINE_GITHUB_API_TOKEN=${{secrets.MACHINE_GITHUB_API_TOKEN}}
           pub get
           pub global activate cider
-          dart tool/auto_release_on_merge.dart ${{github.repository}} ${{github.event.pull_request.number}}
+          dart tool/auto_release_on_merge.dart ${{github.event.pull_request.number}}
           
