@@ -48,8 +48,8 @@ Future<void> main(List<String> args) async {
   // remove the unreleased labels
   for (var i in unreleased) {
     await gh.issues.removeLabelForIssue(slug, i.number, 'unreleased');
-    gh.issues.addLabelsToIssue(slug, i.number, ['released']);
-    gh.pullRequests.createComment(slug, i.number, CreatePullRequestComment('Released in version $nextVersion',null,null,null));
+    await gh.issues.addLabelsToIssue(slug, i.number, ['released']);
+    await gh.issues.createComment(slug, i.number, 'Released in version $nextVersion');
   }
 
   exit(0);
