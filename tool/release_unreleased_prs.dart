@@ -34,7 +34,7 @@ Future<void> main(List<String> args) async {
   var notes = await generateReleaseNotes(latestVersion.toString(), nextVersion);
 
   // update the changelog with the new release notes
-  updateChangeLog(notes);
+  updateChangeLog(notes, nextVersion);
 
   // update the version in the pubspec
   updatePubspec(nextVersion);
@@ -123,9 +123,10 @@ Future<String> generateReleaseNotes(String fromVersion, String newVersion) async
   return r;
 }
 
-void updateChangeLog(String notes) {
+void updateChangeLog(String notes, String version) {
   var log = File('CHANGELOG.md');
   var logdata = log.existsSync() ? log.readAsStringSync() : '';
+  if (logdata.contains('## $version')) return;
   log.writeAsStringSync('$notes\n\n$logdata');
 }
 
