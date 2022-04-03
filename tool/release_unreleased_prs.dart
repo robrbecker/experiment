@@ -43,7 +43,7 @@ Future<void> main(List<String> args) async {
   commitUpdates(nextVersion);
 
   // create a new release in github at main
-  createRelease(nextVersion, mainBranchName);
+  await createRelease(nextVersion, mainBranchName);
 
   exit(0);
 }
@@ -138,7 +138,8 @@ void updatePubspec(String newVersion) {
 }
 
 Future<Release> createRelease(String version, String target) async {
-    return gh.repositories.createRelease(
+    print('Creating release ...');
+    var release = await gh.repositories.createRelease(
       slug,
       CreateRelease.from(
           tagName: version,
@@ -147,6 +148,10 @@ Future<Release> createRelease(String version, String target) async {
           targetCommitish: target,
           isDraft: false,
           isPrerelease: false));
+
+    print('Release ${release.name} created ${release.createdAt}');
+    print(release.body);
+    return release;
 }
 
 void commitUpdates(String version) {
