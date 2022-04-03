@@ -1,3 +1,6 @@
+## 2.0.0
+**Full Changelog**: https://github.com/robrbecker/experiment/compare/1.5.0...2.0.0
+
 ## 1.5.0
 
 * Update README.md by @robrbecker in https://github.com/robrbecker/experiment/pull/17
