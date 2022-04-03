@@ -12,6 +12,13 @@
 
 **Full Changelog**: https://github.com/robrbecker/experiment/compare/1.0.2...1.1.0
 
+## 1.1.0
+
+* again by @robrbecker in https://github.com/robrbecker/experiment/pull/15
+
+
+**Full Changelog**: https://github.com/robrbecker/experiment/compare/1.0.2...1.1.0
+
 ## 1.0.2
 
 * next by @robrbecker in https://github.com/robrbecker/experiment/pull/14
