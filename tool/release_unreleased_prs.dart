@@ -150,7 +150,7 @@ Future<Release> createRelease(String version, String target) async {
 }
 
 void commitUpdates(String version) {
-  run('git add pubspec.yaml CHANGELOG.md');
-  run('git', rest: ['commit', '-m', 'prep $version']);
-  run('git push');
+  run('git add pubspec.yaml CHANGELOG.md || true');
+  run('git', rest: ['commit', '-m', 'prep $version','||','true']);
+  run('git push || true');
 }
