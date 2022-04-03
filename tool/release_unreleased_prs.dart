@@ -45,6 +45,13 @@ Future<void> main(List<String> args) async {
   // create a new release in github at main
   await createRelease(nextVersion, mainBranchName);
 
+  // remove the unreleased labels
+  for (var i in unreleased) {
+    await gh.issues.removeLabelForIssue(slug, i.number, 'unreleased');
+    gh.issues.addLabelsToIssue(slug, i.number, ['released']);
+    gh.pullRequests.createComment(slug, i.number, CreatePullRequestComment('Released in version $nextVersion',null,null,null));
+  }
+
   exit(0);
 }
 
