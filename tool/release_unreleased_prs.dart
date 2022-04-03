@@ -69,9 +69,9 @@ String run(String cmd, {List<String>? rest}) {
   if (result.stderr != null) {
     print(result.stderr);
   }
-  if (result.exitCode != 0) {
-    exit(6);
-  }
+  // if (result.exitCode != 0) {
+  //   exit(6);
+  // }
 
   return result.stdout;
 }
@@ -150,7 +150,7 @@ Future<Release> createRelease(String version, String target) async {
 }
 
 void commitUpdates(String version) {
-  run('git add pubspec.yaml CHANGELOG.md || true');
-  run('git', rest: ['commit', '-m', 'prep $version','||','true']);
-  run('git push || true');
+  run('git add pubspec.yaml CHANGELOG.md');
+  run('git', rest: ['commit', '-m', 'prep $version']);
+  run('git push');
 }
