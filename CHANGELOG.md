@@ -1,3 +1,15 @@
+## 1.3.0
+
+* Update README.md by @robbecker-wf in https://github.com/robrbecker/experiment/pull/16
+
+## New Contributors
+* @robbecker-wf made their first contribution in https://github.com/robrbecker/experiment/pull/16
+
+**Full Changelog**: https://github.com/robrbecker/experiment/compare/1.2.0...1.3.0
+
+## 1.2.0
+**Full Changelog**: https://github.com/robrbecker/experiment/compare/1.1.0...1.2.0
+
 ## 1.1.0
 
 * again by @robrbecker in https://github.com/robrbecker/experiment/pull/15
