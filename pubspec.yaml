@@ -1,13 +1,15 @@
 name: experiment
-version: 1.1.0
+version: 1.0.2
 description: An experimental repo to try things out
 homepage: https://github.com/robrbecker/experiment
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
-
-# dependencies:
+  sdk: '>=2.14.0 <3.0.0'  
 
 dev_dependencies:
+  pub_semver:
   github:
   yaml:
+  build_runner:
+  build_web_compilers: 
+  yaml_edit:
