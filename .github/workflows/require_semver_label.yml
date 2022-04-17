@@ -11,3 +11,8 @@ jobs:
           mode: exactly
           count: 1
           labels: "semver:patch, semver:minor, semver:major"
+      - uses: mheap/github-action-required-labels@v1
+        with:
+          mode: exactly
+          count: 1
+          labels: "unreleased"
