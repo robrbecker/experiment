@@ -1,3 +1,10 @@
+## 2.1.1
+
+* Update README.md by @robrbecker in https://github.com/robrbecker/experiment/pull/22
+
+
+**Full Changelog**: https://github.com/robrbecker/experiment/compare/2.1.0...2.1.1
+
 ## 2.1.0
 
 * Update generated.txt by @robrbecker in https://github.com/robrbecker/experiment/pull/21
