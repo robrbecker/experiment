@@ -49,7 +49,7 @@ Future<void> main(List<String> args) async {
   for (var i in unreleased) {
     await gh.issues.removeLabelForIssue(slug, i.number, 'unreleased');
     await gh.issues.addLabelsToIssue(slug, i.number, ['released']);
-    await gh.issues.createComment(slug, i.number, 'Released in version https://github.com/$fullrepo/releases/tag/$nextVersion');
+    await gh.issues.createComment(slug, i.number, 'Released in version $nextVersion https://github.com/$fullrepo/releases/tag/$nextVersion');
   }
 
   exit(0);
